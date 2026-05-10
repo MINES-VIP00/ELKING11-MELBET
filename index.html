@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELKING11</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #050500; font-family: 'Share Tech Mono', monospace; color: #fff; min-height: 100vh; overflow: hidden; }
+  .screen { display: none; width: 100%; height: 100vh; }
+  .screen.active { display: flex; }
+ 
+  #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.2; pointer-events: none; }
+ 
+  .scan-line {
+    position: fixed; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,220,0,0.3), transparent);
+    animation: scan 3s linear infinite; z-index: 1;
+  }
+  @keyframes scan { 0%{top:0} 100%{top:100vh} }
+ 
+  /* ===== LOGIN ===== */
+  #login-screen { align-items: center; justify-content: center; flex-direction: column; }
+ 
+  .login-box {
+    position: relative; z-index: 2;
+    background: rgba(10,8,0,0.93);
+    border: 1px solid #ccaa00;
+    border-radius: 4px;
+    padding: 40px 40px 32px; width: 430px;
+    box-shadow: 0 0 50px rgba(200,170,0,0.25), inset 0 0 60px rgba(200,170,0,0.03);
+  }
+  .corner { position: absolute; width: 14px; height: 14px; border-color: #ffdd00; border-style: solid; }
+  .corner.tl{top:-1px;left:-1px;border-width:2px 0 0 2px}
+  .corner.tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
+  .corner.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
+  .corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+ 
+  .mariam-sub {
+    font-family: "Orbitron", monospace;
+    font-size: 28px;
+    font-weight: 900;
+    color: #ffdd00;
+    text-align: center;
+    letter-spacing: 4px;
+    margin-bottom: 14px;
+    text-shadow: 0 0 20px rgba(255,220,0,0.7);
+    line-height: 1.3;
+  }
+  .mariam-title {
+    font-family: 'Orbitron', monospace; font-size: 52px; font-weight: 900;
+    text-align: center; letter-spacing: 6px; margin-bottom: 10px;
+    background: linear-gradient(90deg, #ffdd00, #fff700, #ffaa00);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    filter: drop-shadow(0 0 12px rgba(255,220,0,0.6));
+  }
+  .logo {
+    font-family:'Orbitron',monospace; font-size:48px; font-weight:900; color:#ffdd00;
+    text-align:center; letter-spacing:6px; margin-bottom:4px;
+    text-shadow:0 0 24px rgba(255,220,0,0.7);
+  }
+  .logo-sub { font-size:10px; color:#665500; text-align:center; letter-spacing:6px; margin-bottom:30px; }
+ 
+  .field-label { font-size:11px; color:#887700; letter-spacing:3px; margin-bottom:8px; display:block; }
+  .field-input {
+    width:100%; background:rgba(20,16,0,0.85); border:1px solid #443300;
+    border-radius:2px; color:#ffdd00; font-family:'Share Tech Mono',monospace;
+    font-size:16px; padding:12px 16px; margin-bottom:22px; outline:none;
+    transition:border-color 0.2s; letter-spacing:2px;
+  }
+  .field-input:focus { border-color:#ccaa00; box-shadow:0 0 10px rgba(200,170,0,0.25); }
+  .field-input::placeholder { color:#332200; }
+ 
+  .login-btn {
+    width:100%; background:linear-gradient(90deg,#ccaa00,#ffdd00,#cc8800);
+    border:none; border-radius:2px; color:#000; font-family:'Orbitron',monospace;
+    font-size:13px; font-weight:900; letter-spacing:4px; padding:14px;
+    cursor:pointer; transition:all 0.2s; margin-top:4px;
+  }
+  .login-btn:hover { box-shadow:0 0 30px rgba(255,220,0,0.6); transform:translateY(-1px); }
+  .login-btn:active { transform:scale(0.98); }
+ 
+  .error-msg { color:#ffaa00; font-size:11px; text-align:center; margin-top:12px; letter-spacing:2px; min-height:16px; }
+ 
+  .tg-login { text-align:center; margin-top:20px; padding:14px 0 4px; border-top:1px solid #332200; }
+  .tg-login .tg-label { font-size:11px; color:#665500; letter-spacing:3px; margin-bottom:8px; }
+  .tg-login a {
+    display:inline-block; color:#2aabee; text-decoration:none;
+    font-family:'Orbitron',monospace; font-size:22px; font-weight:900;
+    letter-spacing:4px; text-shadow:0 0 14px rgba(42,171,238,0.5); transition:all 0.2s;
+  }
+  .tg-login a:hover { color:#7dd4ff; text-shadow:0 0 24px rgba(42,171,238,0.8); }
+ 
+  /* ===== LOADING ===== */
+  #loading-screen { align-items:center; justify-content:center; flex-direction:column; gap:28px; }
+  .loading-title {
+    font-family:'Orbitron',monospace; font-size:22px; font-weight:700;
+    color:#ffdd00; letter-spacing:6px; text-align:center; z-index:2;
+    text-shadow:0 0 20px rgba(255,220,0,0.5);
+  }
+  .loading-sub { font-size:11px; color:#665500; letter-spacing:6px; text-align:center; z-index:2; margin-top:-16px; }
+  .progress-wrap { width:360px; z-index:2; }
+  .progress-bar-bg {
+    width:100%; height:6px; background:rgba(100,80,0,0.3);
+    border:1px solid #443300; border-radius:2px; overflow:hidden; margin-bottom:10px;
+  }
+  .progress-bar-fill {
+    height:100%; width:0%;
+    background:linear-gradient(90deg,#886600,#ffdd00,#fff700);
+    border-radius:2px; transition:width 0.5s linear;
+    box-shadow:0 0 10px rgba(255,220,0,0.6);
+  }
+  .progress-pct { font-size:12px; color:#ccaa00; text-align:right; letter-spacing:2px; }
+  .loading-log { font-size:11px; color:#665500; letter-spacing:2px; text-align:center; z-index:2; }
+ 
+  /* ===== DASHBOARD ===== */
+  #dashboard-screen { flex-direction:column; align-items:center; justify-content:center; gap:30px; }
+  .dash-header {
+    position:absolute; top:24px; left:0; right:0;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0 32px; z-index:2;
+  }
+  .dash-logo { font-family:'Orbitron',monospace; font-size:15px; font-weight:900; color:#ccaa00; letter-spacing:4px; }
+  .dash-uid { font-size:11px; color:#554400; letter-spacing:3px; }
+ 
+  /* ===== NUMBER SCREEN (بدل الصورة الخضرا) ===== */
+  .number-screen {
+    width:360px; height:180px;
+    border:2px solid #ccaa00;
+    border-radius:4px;
+    background: rgba(10,8,0,0.95);
+    box-shadow: 0 0 30px rgba(255,220,0,0.2), inset 0 0 40px rgba(200,170,0,0.05);
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap: 8px;
+  }
+ 
+  .num-label {
+    font-size:10px; color:#554400; letter-spacing:4px;
+  }
+ 
+  .big-number {
+    font-family:'Orbitron',monospace; font-size:72px; font-weight:900;
+    color:#ffdd00;
+    text-shadow: 0 0 30px rgba(255,220,0,0.8), 0 0 60px rgba(255,220,0,0.4);
+    letter-spacing:4px;
+    transition: opacity 0.3s;
+  }
+ 
+  /* حالة الـ loading بعد AGAIN */
+  .spinner-wrap {
+    display:none;
+    flex-direction:column; align-items:center; gap:14px;
+  }
+  .spinner {
+    width:48px; height:48px;
+    border:3px solid #332200;
+    border-top:3px solid #ffdd00;
+    border-radius:50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner-text { font-size:11px; color:#665500; letter-spacing:4px; }
+ 
+  /* حالة الانتظار (قبل أول ضغطة) */
+  .idle-text {
+    font-family:'Share Tech Mono',monospace;
+    font-size:13px; color:#443300; letter-spacing:4px;
+  }
+ 
+  .btn-group { display:flex; flex-direction:row; gap:20px; z-index:2; }
+  .game-btn {
+    font-family:'Orbitron',monospace; font-size:17px; font-weight:900;
+    letter-spacing:5px; width:160px; height:60px; border-radius:3px; cursor:pointer; transition:all 0.2s;
+  }
+  .btn-start {
+    background:linear-gradient(135deg,#ccaa00,#ffdd00);
+    border:1px solid #ffee00; color:#000;
+    box-shadow:0 0 22px rgba(200,170,0,0.4);
+  }
+  .btn-start:hover { box-shadow:0 0 40px rgba(255,220,0,0.6); transform:translateY(-2px); }
+  .btn-again {
+    background:transparent; border:1px solid #665500; color:#ccaa00;
+  }
+  .btn-again:hover { border-color:#ffdd00; color:#ffee00; box-shadow:0 0 20px rgba(200,170,0,0.3); transform:translateY(-2px); }
+  .btn-start:active,.btn-again:active { transform:scale(0.97); }
+ 
+  .tg-dash { text-align:center; z-index:2; display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .tg-dash .tg-label { font-size:11px; color:#443300; letter-spacing:3px; }
+  .tg-dash a {
+    color:#2aabee; text-decoration:none; font-family:'Orbitron',monospace;
+    font-size:38px; font-weight:900; letter-spacing:4px;
+    text-shadow:0 0 14px rgba(42,171,238,0.5); transition:all 0.2s;
+  }
+  .tg-dash a:hover { color:#7dd4ff; text-shadow:0 0 28px rgba(42,171,238,0.9); }
+ 
+  .dash-footer { position:absolute; bottom:14px; font-size:10px; color:#1a1a00; letter-spacing:3px; }
+</style>
+</head>
+<body>
+ 
+<canvas id="matrix-canvas"></canvas>
+<div class="scan-line"></div>
+ 
+<!-- LOGIN -->
+<div id="login-screen" class="screen active">
+  <div class="login-box">
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+    <div class="mariam-sub">لازم تسجل بالبرومو</div>
+    <div class="logo">ELKING11</div>
+    <div class="logo-sub">SIMULATOR SYSTEM</div>
+    <label class="field-label">// USER_ID &nbsp;(10 أرقام)</label>
+    <input id="user-id" class="field-input" type="text" maxlength="10" placeholder="0000000000" autocomplete="off">
+    <label class="field-label">// PASSWORD</label>
+    <input id="password" class="field-input" type="password" placeholder="ادخل الباسورد" autocomplete="off">
+    <button class="login-btn" onclick="doLogin()">ENTER SYSTEM &rarr;</button>
+    <div id="err" class="error-msg"></div>
+    <div class="tg-login">
+      <div class="tg-label">// للتواصل والطلبات</div>
+      <a href="https://t.me/mari_3_m" target="_blank">@mari_3_m</a>
+    </div>
+  </div>
+</div>
+ 
+<!-- LOADING -->
+<div id="loading-screen" class="screen">
+  <div class="loading-title">ELKING11 SIMULATOR</div>
+  <div class="loading-sub">SYSTEM INITIALIZATION</div>
+  <div class="progress-wrap">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill"></div></div>
+    <div class="progress-pct" id="prog-pct">0%</div>
+  </div>
+  <div class="loading-log" id="load-log">Initializing Game Engine...</div>
+</div>
+ 
+<!-- DASHBOARD -->
+<div id="dashboard-screen" class="screen">
+  <div class="dash-header">
+    <div class="dash-logo">ELKING11</div>
+    <div class="dash-uid" id="uid-display">USER: —</div>
+  </div>
+ 
+  <!-- شاشة الأرقام بدل الصورة -->
+  <div class="number-screen">
+    <!-- حالة الانتظار قبل أي ضغطة -->
+    <div id="idle-state">
+      <div class="idle-text">PRESS START</div>
+    </div>
+    <!-- الرقم العشوائي -->
+    <div id="number-state" style="display:none; flex-direction:column; align-items:center; gap:8px;">
+      <div class="num-label">// RESULT</div>
+      <div class="big-number" id="big-num">—</div>
+    </div>
+    <!-- علامة التحميل بعد AGAIN -->
+    <div class="spinner-wrap" id="spinner-state">
+      <div class="spinner"></div>
+      <div class="spinner-text">LOADING...</div>
+    </div>
+  </div>
+ 
+  <div class="btn-group">
+    <button class="game-btn btn-start" id="btn-start" onclick="handleStart()">START</button>
+    <button class="game-btn btn-again" id="btn-again" onclick="handleAgain()">AGAIN</button>
+  </div>
+ 
+  <div class="tg-dash">
+    <div class="tg-label">// للتواصل والطلبات</div>
+    <a href="https://t.me/mari_3_m" target="_blank">@mari_3_m</a>
+  </div>
+ 
+  <div class="dash-footer">FICTIONAL SIMULATOR — FOR ENTERTAINMENT ONLY</div>
+</div>
+ 
+<script>
+// Matrix Rain
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize',()=>{ canvas.width=window.innerWidth; canvas.height=window.innerHeight; init(); });
+const chars='0123456789ABCDEF<>{}[]()=>+-*/&|!?@#$%^~';
+const fontSize=13; let cols,drops;
+function init(){ cols=Math.floor(canvas.width/fontSize); drops=Array(cols).fill(1); } init();
+function drawMatrix(){
+  ctx.fillStyle='rgba(5,5,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.font=fontSize+'px Share Tech Mono,monospace';
+  for(let i=0;i<drops.length;i++){
+    const ch=chars[Math.floor(Math.random()*chars.length)];
+    const r=Math.random();
+    if(r<0.3) ctx.fillStyle='#ffdd00';
+    else if(r<0.55) ctx.fillStyle='#ccaa00';
+    else if(r<0.75) ctx.fillStyle='#886600';
+    else ctx.fillStyle='#fff700';
+    ctx.fillText(ch,i*fontSize,drops[i]*fontSize);
+    if(drops[i]*fontSize>canvas.height&&Math.random()>0.975) drops[i]=0;
+    drops[i]++;
+  }
+} setInterval(drawMatrix,40);
+ 
+// App logic
+const logs=["Initializing Game Engine...","Loading core modules...","Allocating memory buffers...","Connecting render pipeline...","Verifying system integrity...","Calibrating crash physics...","Loading user profile...","Finalizing dashboard..."];
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function doLogin(){
+  const uid=document.getElementById('user-id').value.trim();
+  const pass=document.getElementById('password').value.trim();
+  const err=document.getElementById('err');
+  if(!/^\d{10}$/.test(uid)){err.textContent='// ERROR: USER_ID يجب أن يكون 10 أرقام فقط';return;}
+  if(pass!=='ELKING11'){err.textContent='// ERROR: PASSWORD غلط';return;}
+  err.textContent='';
+  document.getElementById('uid-display').textContent='USER: '+uid;
+  show('loading-screen'); startLoading();
+}
+function startLoading(){
+  const fill=document.getElementById('prog-fill'),pct=document.getElementById('prog-pct'),log=document.getElementById('load-log');
+  let progress=0,logIdx=0;
+  const iv=setInterval(()=>{
+    progress+=(100/40)*0.5;
+    if(progress>=100){progress=100;clearInterval(iv);setTimeout(()=>show('dashboard-screen'),400);}
+    fill.style.width=progress.toFixed(1)+'%'; pct.textContent=Math.floor(progress)+'%';
+    const li=Math.floor((progress/100)*logs.length);
+    if(li!==logIdx&&li<logs.length){logIdx=li;log.textContent=logs[li];}
+  },500);
+}
+ 
+// ===== منطق الأرقام =====
+// حالات: 'idle' | 'number' | 'loading'
+let appState = 'idle';
+ 
+function getRandomNumber(){
+  // رقم عشوائي من 1.00 لـ 12.00 بدقة عشرتين
+  const val = Math.random() * (12.00 - 1.00) + 1.00;
+  return val.toFixed(2);
+}
+ 
+function setScreenState(state){
+  document.getElementById('idle-state').style.display   = state==='idle'    ? 'block' : 'none';
+  document.getElementById('number-state').style.display = state==='number'  ? 'flex'  : 'none';
+  document.getElementById('spinner-state').style.display= state==='loading' ? 'flex'  : 'none';
+  appState = state;
+}
+ 
+function handleStart(){
+  btnAnim(document.getElementById('btn-start'));
+  // لو حالة loading → اعمل رقم جديد
+  // لو idle أو number → اعمل رقم جديد
+  const num = getRandomNumber();
+  document.getElementById('big-num').textContent = num;
+  setScreenState('number');
+}
+ 
+function handleAgain(){
+  btnAnim(document.getElementById('btn-again'));
+  // اعمل loading spinner بس، انتظر START
+  setScreenState('loading');
+}
+ 
+function btnAnim(btn){
+  btn.style.transform='scale(0.95)';
+  setTimeout(()=>btn.style.transform='',150);
+}
+ 
+document.getElementById('user-id').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('password').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+</script>
+</body>
+</html>
+ 
