@@ -20,6 +20,74 @@
   }
   @keyframes scan { 0%{top:0} 100%{top:100vh} }
  
+  /* ===== GATE SCREEN ===== */
+  #gate-screen { align-items:center; justify-content:center; flex-direction:column; }
+  .gate-box {
+    position:relative; z-index:2;
+    background:rgba(10,8,0,0.95);
+    border:1px solid #ccaa00;
+    border-radius:4px;
+    padding:40px 40px 32px; width:460px;
+    box-shadow:0 0 50px rgba(200,170,0,0.25), inset 0 0 60px rgba(200,170,0,0.03);
+    text-align:center;
+  }
+  .gate-title {
+    font-family:'Orbitron',monospace; font-size:28px; font-weight:900;
+    color:#ffdd00; letter-spacing:4px; margin-bottom:8px;
+    text-shadow:0 0 20px rgba(255,220,0,0.7);
+  }
+  .gate-sub {
+    font-size:12px; color:#887700; letter-spacing:3px; margin-bottom:30px;
+  }
+  .gate-steps { display:flex; flex-direction:column; gap:16px; margin-bottom:28px; }
+  .gate-step {
+    display:flex; align-items:center; gap:16px;
+    background:rgba(20,16,0,0.8); border:1px solid #332200;
+    border-radius:3px; padding:14px 18px;
+    transition:border-color 0.3s;
+  }
+  .gate-step.done { border-color:#ccaa00; }
+  .step-icon { font-size:26px; flex-shrink:0; }
+  .step-info { text-align:right; flex:1; }
+  .step-name { font-family:'Orbitron',monospace; font-size:13px; color:#ccaa00; letter-spacing:2px; margin-bottom:4px; }
+  .step-desc { font-size:10px; color:#554400; letter-spacing:2px; }
+  .step-status {
+    font-size:18px; flex-shrink:0;
+    transition:all 0.3s;
+  }
+  .step-status.pending { color:#332200; }
+  .step-status.done { color:#ffdd00; text-shadow:0 0 10px rgba(255,220,0,0.8); }
+  .gate-btn {
+    display:inline-block; text-decoration:none;
+    font-family:'Orbitron',monospace; font-size:13px; font-weight:900;
+    letter-spacing:3px; padding:13px 28px; border-radius:2px; cursor:pointer;
+    transition:all 0.2s; border:none; width:100%; text-align:center;
+  }
+  .gate-btn-tg {
+    background:linear-gradient(90deg,#0077aa,#2aabee,#0099cc);
+    color:#fff; margin-bottom:12px;
+    box-shadow:0 0 20px rgba(42,171,238,0.3);
+  }
+  .gate-btn-tg:hover { box-shadow:0 0 35px rgba(42,171,238,0.6); transform:translateY(-1px); }
+  .gate-btn-tt {
+    background:rgba(20,16,0,0.9); border:1px solid #554400; color:#ccaa00;
+    margin-bottom:20px;
+  }
+  .gate-btn-tt:hover { border-color:#ffdd00; box-shadow:0 0 20px rgba(200,170,0,0.3); transform:translateY(-1px); }
+  .gate-enter-btn {
+    width:100%; background:linear-gradient(90deg,#443300,#665500);
+    border:1px solid #443300; border-radius:2px; color:#554400;
+    font-family:'Orbitron',monospace; font-size:13px; font-weight:900;
+    letter-spacing:4px; padding:14px; cursor:not-allowed; transition:all 0.3s;
+  }
+  .gate-enter-btn.unlocked {
+    background:linear-gradient(90deg,#ccaa00,#ffdd00,#cc8800);
+    border-color:#ffee00; color:#000; cursor:pointer;
+    box-shadow:0 0 25px rgba(255,220,0,0.4);
+  }
+  .gate-enter-btn.unlocked:hover { box-shadow:0 0 40px rgba(255,220,0,0.7); transform:translateY(-1px); }
+  .gate-note { font-size:10px; color:#332200; letter-spacing:2px; margin-top:14px; }
+ 
   /* ===== LOGIN ===== */
   #login-screen { align-items: center; justify-content: center; flex-direction: column; }
  
@@ -124,7 +192,6 @@
   .dash-logo { font-family:'Orbitron',monospace; font-size:15px; font-weight:900; color:#ccaa00; letter-spacing:4px; }
   .dash-uid { font-size:11px; color:#554400; letter-spacing:3px; }
  
-  /* ===== NUMBER SCREEN (بدل الصورة الخضرا) ===== */
   .number-screen {
     width:360px; height:180px;
     border:2px solid #ccaa00;
@@ -135,39 +202,22 @@
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap: 8px;
   }
- 
-  .num-label {
-    font-size:10px; color:#554400; letter-spacing:4px;
-  }
- 
+  .num-label { font-size:10px; color:#554400; letter-spacing:4px; }
   .big-number {
     font-family:'Orbitron',monospace; font-size:72px; font-weight:900;
     color:#ffdd00;
     text-shadow: 0 0 30px rgba(255,220,0,0.8), 0 0 60px rgba(255,220,0,0.4);
-    letter-spacing:4px;
-    transition: opacity 0.3s;
+    letter-spacing:4px; transition: opacity 0.3s;
   }
- 
-  /* حالة الـ loading بعد AGAIN */
-  .spinner-wrap {
-    display:none;
-    flex-direction:column; align-items:center; gap:14px;
-  }
+  .spinner-wrap { display:none; flex-direction:column; align-items:center; gap:14px; }
   .spinner {
-    width:48px; height:48px;
-    border:3px solid #332200;
-    border-top:3px solid #ffdd00;
-    border-radius:50%;
+    width:48px; height:48px; border:3px solid #332200;
+    border-top:3px solid #ffdd00; border-radius:50%;
     animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   .spinner-text { font-size:11px; color:#665500; letter-spacing:4px; }
- 
-  /* حالة الانتظار (قبل أول ضغطة) */
-  .idle-text {
-    font-family:'Share Tech Mono',monospace;
-    font-size:13px; color:#443300; letter-spacing:4px;
-  }
+  .idle-text { font-family:'Share Tech Mono',monospace; font-size:13px; color:#443300; letter-spacing:4px; }
  
   .btn-group { display:flex; flex-direction:row; gap:20px; z-index:2; }
   .game-btn {
@@ -194,7 +244,6 @@
     text-shadow:0 0 14px rgba(42,171,238,0.5); transition:all 0.2s;
   }
   .tg-dash a:hover { color:#7dd4ff; text-shadow:0 0 28px rgba(42,171,238,0.9); }
- 
   .dash-footer { position:absolute; bottom:14px; font-size:10px; color:#1a1a00; letter-spacing:3px; }
 </style>
 </head>
@@ -203,8 +252,46 @@
 <canvas id="matrix-canvas"></canvas>
 <div class="scan-line"></div>
  
+<!-- GATE SCREEN -->
+<div id="gate-screen" class="screen active">
+  <div class="gate-box">
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+    <div class="gate-title">ELKING11</div>
+    <div class="gate-sub">// قبل ما تدخل لازم تكمل الخطوتين دول</div>
+    <div class="gate-steps">
+      <div class="gate-step" id="step-tg">
+        <div class="step-icon">✈️</div>
+        <div class="step-info">
+          <div class="step-name">TELEGRAM CHANNEL</div>
+          <div class="step-desc">اشترك في القناة الرسمية</div>
+        </div>
+        <div class="step-status pending" id="status-tg">○</div>
+      </div>
+      <div class="gate-step" id="step-tt">
+        <div class="step-icon">🎵</div>
+        <div class="step-info">
+          <div class="step-name">TIKTOK PAGE</div>
+          <div class="step-desc">فولو صفحة التيك توك</div>
+        </div>
+        <div class="step-status pending" id="status-tt">○</div>
+      </div>
+    </div>
+    <a href="https://t.me/ELKING_1_1" target="_blank" class="gate-btn gate-btn-tg" id="btn-tg" onclick="markTg()">
+      📣 &nbsp; اشترك في قناة التليجرام
+    </a>
+    <a href="https://www.tiktok.com/@crash_x_11?_r=1&_t=ZS-96zeqvxRWab" target="_blank" class="gate-btn gate-btn-tt" id="btn-tt" onclick="markTt()">
+      🎵 &nbsp; فولو صفحة التيك توك
+    </a>
+    <button class="gate-enter-btn" id="gate-enter" onclick="enterSite()" disabled>
+      ENTER SYSTEM →
+    </button>
+    <div class="gate-note">// بعد ما تعمل الخطوتين هيتفتح زرار الدخول</div>
+  </div>
+</div>
+ 
 <!-- LOGIN -->
-<div id="login-screen" class="screen active">
+<div id="login-screen" class="screen">
   <div class="login-box">
     <div class="corner tl"></div><div class="corner tr"></div>
     <div class="corner bl"></div><div class="corner br"></div>
@@ -241,35 +328,27 @@
     <div class="dash-logo">ELKING11</div>
     <div class="dash-uid" id="uid-display">USER: —</div>
   </div>
- 
-  <!-- شاشة الأرقام بدل الصورة -->
   <div class="number-screen">
-    <!-- حالة الانتظار قبل أي ضغطة -->
     <div id="idle-state">
       <div class="idle-text">PRESS START</div>
     </div>
-    <!-- الرقم العشوائي -->
     <div id="number-state" style="display:none; flex-direction:column; align-items:center; gap:8px;">
       <div class="num-label">// RESULT</div>
       <div class="big-number" id="big-num">—</div>
     </div>
-    <!-- علامة التحميل بعد AGAIN -->
     <div class="spinner-wrap" id="spinner-state">
       <div class="spinner"></div>
       <div class="spinner-text">LOADING...</div>
     </div>
   </div>
- 
   <div class="btn-group">
     <button class="game-btn btn-start" id="btn-start" onclick="handleStart()">START</button>
     <button class="game-btn btn-again" id="btn-again" onclick="handleAgain()">AGAIN</button>
   </div>
- 
   <div class="tg-dash">
     <div class="tg-label">// للتواصل والطلبات</div>
     <a href="https://t.me/mari_3_m" target="_blank">@mari_3_m</a>
   </div>
- 
   <div class="dash-footer">FICTIONAL SIMULATOR — FOR ENTERTAINMENT ONLY</div>
 </div>
  
@@ -298,24 +377,80 @@ function drawMatrix(){
   }
 } setInterval(drawMatrix,40);
  
-// App logic
+// ===== GATE LOGIC =====
+let doneTg = false, doneTt = false;
+ 
+function markTg(){
+  setTimeout(()=>{
+    doneTg = true;
+    document.getElementById('status-tg').textContent = '✔';
+    document.getElementById('status-tg').classList.remove('pending');
+    document.getElementById('status-tg').classList.add('done');
+    document.getElementById('step-tg').classList.add('done');
+    checkGate();
+  }, 800);
+}
+ 
+function markTt(){
+  setTimeout(()=>{
+    doneTt = true;
+    document.getElementById('status-tt').textContent = '✔';
+    document.getElementById('status-tt').classList.remove('pending');
+    document.getElementById('status-tt').classList.add('done');
+    document.getElementById('step-tt').classList.add('done');
+    checkGate();
+  }, 800);
+}
+ 
+function checkGate(){
+  if(doneTg && doneTt){
+    const btn = document.getElementById('gate-enter');
+    btn.disabled = false;
+    btn.classList.add('unlocked');
+  }
+}
+ 
+function enterSite(){
+  if(!doneTg || !doneTt) return;
+  show('login-screen');
+}
+ 
+// ===== APP LOGIC =====
 const logs=["Initializing Game Engine...","Loading core modules...","Allocating memory buffers...","Connecting render pipeline...","Verifying system integrity...","Calibrating crash physics...","Loading user profile...","Finalizing dashboard..."];
+ 
 function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+ 
+// الباسورد = كل رقمين من الـ ID يتفصلوا بـ @ # $ % بالتسلسل
+// مثال: 1234567890  →  12@34#56$78%90
+function buildPassword(uid){
+  const syms = ['@','#','$','%'];
+  let result = '';
+  for(let i=0; i<uid.length; i+=2){
+    if(i>0){
+      result += syms[((i/2)-1) % syms.length];
+    }
+    result += uid.substring(i, i+2);
+  }
+  return result;
+}
+ 
 function doLogin(){
   const uid=document.getElementById('user-id').value.trim();
   const pass=document.getElementById('password').value.trim();
   const err=document.getElementById('err');
   if(!/^\d{10}$/.test(uid)){err.textContent='// ERROR: USER_ID يجب أن يكون 10 أرقام فقط';return;}
-  if(pass!=='ELKING11'){err.textContent='// ERROR: PASSWORD غلط';return;}
+  const correctPass = buildPassword(uid);
+  if(pass !== correctPass){err.textContent='// ERROR: PASSWORD غلط';return;}
   err.textContent='';
   document.getElementById('uid-display').textContent='USER: '+uid;
   show('loading-screen'); startLoading();
 }
+ 
 function startLoading(){
   const fill=document.getElementById('prog-fill'),pct=document.getElementById('prog-pct'),log=document.getElementById('load-log');
   let progress=0,logIdx=0;
   const iv=setInterval(()=>{
-    progress+=(100/40)*0.5;
+    progress+=(100/20)*0.5;
     if(progress>=100){progress=100;clearInterval(iv);setTimeout(()=>show('dashboard-screen'),400);}
     fill.style.width=progress.toFixed(1)+'%'; pct.textContent=Math.floor(progress)+'%';
     const li=Math.floor((progress/100)*logs.length);
@@ -323,38 +458,25 @@ function startLoading(){
   },500);
 }
  
-// ===== منطق الأرقام =====
-// حالات: 'idle' | 'number' | 'loading'
+// ===== NUMBER LOGIC =====
 let appState = 'idle';
- 
-function getRandomNumber(){
-  // رقم عشوائي من 1.00 لـ 12.00 بدقة عشرتين
-  const val = Math.random() * (12.00 - 1.00) + 1.00;
-  return val.toFixed(2);
-}
- 
+function getRandomNumber(){ return (Math.random()*(12.00-1.00)+1.00).toFixed(2); }
 function setScreenState(state){
   document.getElementById('idle-state').style.display   = state==='idle'    ? 'block' : 'none';
   document.getElementById('number-state').style.display = state==='number'  ? 'flex'  : 'none';
   document.getElementById('spinner-state').style.display= state==='loading' ? 'flex'  : 'none';
   appState = state;
 }
- 
 function handleStart(){
   btnAnim(document.getElementById('btn-start'));
-  // لو حالة loading → اعمل رقم جديد
-  // لو idle أو number → اعمل رقم جديد
   const num = getRandomNumber();
   document.getElementById('big-num').textContent = num;
   setScreenState('number');
 }
- 
 function handleAgain(){
   btnAnim(document.getElementById('btn-again'));
-  // اعمل loading spinner بس، انتظر START
   setScreenState('loading');
 }
- 
 function btnAnim(btn){
   btn.style.transform='scale(0.95)';
   setTimeout(()=>btn.style.transform='',150);
