@@ -10,9 +10,9 @@
   body { background: #050500; font-family: 'Share Tech Mono', monospace; color: #fff; min-height: 100vh; overflow: hidden; }
   .screen { display: none; width: 100%; height: 100vh; }
   .screen.active { display: flex; }
- 
+
   #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.2; pointer-events: none; }
- 
+
   .scan-line {
     position: fixed; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, transparent, rgba(255,220,0,0.3), transparent);
@@ -22,13 +22,14 @@
 
   /* ===== LOGIN ===== */
   #login-screen { align-items: center; justify-content: center; flex-direction: column; }
- 
+
   .login-box {
     position: relative; z-index: 2;
     background: rgba(10,8,0,0.93);
     border: 1px solid #ccaa00;
     border-radius: 4px;
-    padding: 40px 40px 32px; width: 430px;
+    padding: 40px 40px 32px;
+    width: min(430px, 92vw);
     box-shadow: 0 0 50px rgba(200,170,0,0.25), inset 0 0 60px rgba(200,170,0,0.03);
   }
   .corner { position: absolute; width: 14px; height: 14px; border-color: #ffdd00; border-style: solid; }
@@ -36,32 +37,24 @@
   .corner.tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
   .corner.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
   .corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
- 
+
   .mariam-sub {
     font-family: "Orbitron", monospace;
-    font-size: 28px;
-    font-weight: 900;
-    color: #ffdd00;
-    text-align: center;
-    letter-spacing: 4px;
+    font-size: clamp(16px, 5vw, 28px);
+    font-weight: 900; color: #ffdd00;
+    text-align: center; letter-spacing: 4px;
     margin-bottom: 14px;
     text-shadow: 0 0 20px rgba(255,220,0,0.7);
     line-height: 1.3;
   }
-  .mariam-title {
-    font-family: 'Orbitron', monospace; font-size: 52px; font-weight: 900;
-    text-align: center; letter-spacing: 6px; margin-bottom: 10px;
-    background: linear-gradient(90deg, #ffdd00, #fff700, #ffaa00);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    filter: drop-shadow(0 0 12px rgba(255,220,0,0.6));
-  }
   .logo {
-    font-family:'Orbitron',monospace; font-size:48px; font-weight:900; color:#ffdd00;
+    font-family:'Orbitron',monospace; font-size: clamp(30px, 10vw, 48px);
+    font-weight:900; color:#ffdd00;
     text-align:center; letter-spacing:6px; margin-bottom:4px;
     text-shadow:0 0 24px rgba(255,220,0,0.7);
   }
   .logo-sub { font-size:10px; color:#665500; text-align:center; letter-spacing:6px; margin-bottom:30px; }
- 
+
   .field-label { font-size:11px; color:#887700; letter-spacing:3px; margin-bottom:8px; display:block; }
   .field-input {
     width:100%; background:rgba(20,16,0,0.85); border:1px solid #443300;
@@ -71,7 +64,7 @@
   }
   .field-input:focus { border-color:#ccaa00; box-shadow:0 0 10px rgba(200,170,0,0.25); }
   .field-input::placeholder { color:#332200; }
- 
+
   .login-btn {
     width:100%; background:linear-gradient(90deg,#ccaa00,#ffdd00,#cc8800);
     border:none; border-radius:2px; color:#000; font-family:'Orbitron',monospace;
@@ -80,27 +73,28 @@
   }
   .login-btn:hover { box-shadow:0 0 30px rgba(255,220,0,0.6); transform:translateY(-1px); }
   .login-btn:active { transform:scale(0.98); }
- 
+
   .error-msg { color:#ffaa00; font-size:11px; text-align:center; margin-top:12px; letter-spacing:2px; min-height:16px; }
- 
+
   .tg-login { text-align:center; margin-top:20px; padding:14px 0 4px; border-top:1px solid #332200; }
   .tg-login .tg-label { font-size:11px; color:#665500; letter-spacing:3px; margin-bottom:8px; }
   .tg-login a {
     display:inline-block; color:#2aabee; text-decoration:none;
-    font-family:'Orbitron',monospace; font-size:22px; font-weight:900;
-    letter-spacing:4px; text-shadow:0 0 14px rgba(42,171,238,0.5); transition:all 0.2s;
+    font-family:'Orbitron',monospace; font-size: clamp(14px, 5vw, 22px);
+    font-weight:900; letter-spacing:4px;
+    text-shadow:0 0 14px rgba(42,171,238,0.5); transition:all 0.2s;
   }
   .tg-login a:hover { color:#7dd4ff; text-shadow:0 0 24px rgba(42,171,238,0.8); }
- 
+
   /* ===== LOADING ===== */
   #loading-screen { align-items:center; justify-content:center; flex-direction:column; gap:28px; }
   .loading-title {
-    font-family:'Orbitron',monospace; font-size:22px; font-weight:700;
-    color:#ffdd00; letter-spacing:6px; text-align:center; z-index:2;
+    font-family:'Orbitron',monospace; font-size: clamp(14px, 5vw, 22px);
+    font-weight:700; color:#ffdd00; letter-spacing:6px; text-align:center; z-index:2;
     text-shadow:0 0 20px rgba(255,220,0,0.5);
   }
   .loading-sub { font-size:11px; color:#665500; letter-spacing:6px; text-align:center; z-index:2; margin-top:-16px; }
-  .progress-wrap { width:360px; z-index:2; }
+  .progress-wrap { width: min(360px, 85vw); z-index:2; }
   .progress-bar-bg {
     width:100%; height:6px; background:rgba(100,80,0,0.3);
     border:1px solid #443300; border-radius:2px; overflow:hidden; margin-bottom:10px;
@@ -112,10 +106,10 @@
     box-shadow:0 0 10px rgba(255,220,0,0.6);
   }
   .progress-pct { font-size:12px; color:#ccaa00; text-align:right; letter-spacing:2px; }
-  .loading-log { font-size:11px; color:#665500; letter-spacing:2px; text-align:center; z-index:2; }
- 
+  .loading-log { font-size:11px; color:#665500; letter-spacing:2px; text-align:center; z-index:2; padding: 0 16px; }
+
   /* ===== DASHBOARD ===== */
-  #dashboard-screen { flex-direction:column; align-items:center; justify-content:center; gap:30px; }
+  #dashboard-screen { flex-direction:column; align-items:center; justify-content:center; gap:24px; }
   .dash-header {
     position:absolute; top:24px; left:0; right:0;
     display:flex; justify-content:space-between; align-items:center;
@@ -123,11 +117,10 @@
   }
   .dash-logo { font-family:'Orbitron',monospace; font-size:15px; font-weight:900; color:#ccaa00; letter-spacing:4px; }
   .dash-uid { font-size:11px; color:#554400; letter-spacing:3px; }
- 
+
   .number-screen {
-    width:360px; height:180px;
-    border:2px solid #ccaa00;
-    border-radius:4px;
+    width: min(360px, 85vw); height:180px;
+    border:2px solid #ccaa00; border-radius:4px;
     background: rgba(10,8,0,0.95);
     box-shadow: 0 0 30px rgba(255,220,0,0.2), inset 0 0 40px rgba(200,170,0,0.05);
     position:relative; z-index:2;
@@ -136,8 +129,8 @@
   }
   .num-label { font-size:10px; color:#554400; letter-spacing:4px; }
   .big-number {
-    font-family:'Orbitron',monospace; font-size:72px; font-weight:900;
-    color:#ffdd00;
+    font-family:'Orbitron',monospace; font-size: clamp(48px, 15vw, 72px);
+    font-weight:900; color:#ffdd00;
     text-shadow: 0 0 30px rgba(255,220,0,0.8), 0 0 60px rgba(255,220,0,0.4);
     letter-spacing:4px; transition: opacity 0.3s;
   }
@@ -150,11 +143,13 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .spinner-text { font-size:11px; color:#665500; letter-spacing:4px; }
   .idle-text { font-family:'Share Tech Mono',monospace; font-size:13px; color:#443300; letter-spacing:4px; }
- 
+
   .btn-group { display:flex; flex-direction:row; gap:20px; z-index:2; }
   .game-btn {
-    font-family:'Orbitron',monospace; font-size:17px; font-weight:900;
-    letter-spacing:5px; width:160px; height:60px; border-radius:3px; cursor:pointer; transition:all 0.2s;
+    font-family:'Orbitron',monospace; font-size: clamp(13px, 4vw, 17px);
+    font-weight:900; letter-spacing:5px;
+    width: clamp(120px, 38vw, 160px); height:60px;
+    border-radius:3px; cursor:pointer; transition:all 0.2s;
   }
   .btn-start {
     background:linear-gradient(135deg,#ccaa00,#ffdd00);
@@ -162,25 +157,31 @@
     box-shadow:0 0 22px rgba(200,170,0,0.4);
   }
   .btn-start:hover { box-shadow:0 0 40px rgba(255,220,0,0.6); transform:translateY(-2px); }
-  .btn-again {
-    background:transparent; border:1px solid #665500; color:#ccaa00;
-  }
+  .btn-again { background:transparent; border:1px solid #665500; color:#ccaa00; }
   .btn-again:hover { border-color:#ffdd00; color:#ffee00; box-shadow:0 0 20px rgba(200,170,0,0.3); transform:translateY(-2px); }
   .btn-start:active,.btn-again:active { transform:scale(0.97); }
- 
+
   .tg-dash { text-align:center; z-index:2; display:flex; flex-direction:column; align-items:center; gap:4px; }
   .tg-dash .tg-label { font-size:11px; color:#443300; letter-spacing:3px; }
   .tg-dash a {
     color:#2aabee; text-decoration:none; font-family:'Orbitron',monospace;
-    font-size:38px; font-weight:900; letter-spacing:4px;
+    font-size: clamp(24px, 8vw, 38px); font-weight:900; letter-spacing:4px;
     text-shadow:0 0 14px rgba(42,171,238,0.5); transition:all 0.2s;
   }
   .tg-dash a:hover { color:#7dd4ff; text-shadow:0 0 28px rgba(42,171,238,0.9); }
-  .dash-footer { position:absolute; bottom:14px; font-size:10px; color:#1a1a00; letter-spacing:3px; }
+  .dash-footer { position:absolute; bottom:14px; font-size:10px; color:#1a1a00; letter-spacing:3px; text-align:center; width:100%; }
+
+  /* موبايل صغير */
+  @media (max-width: 400px) {
+    .login-box { padding: 24px 14px 18px; }
+    .dash-header { padding: 0 14px; top: 16px; }
+    .btn-group { gap: 10px; }
+    #dashboard-screen { gap: 16px; }
+  }
 </style>
 </head>
 <body>
- 
+
 <canvas id="matrix-canvas"></canvas>
 <div class="scan-line"></div>
 
@@ -193,7 +194,7 @@
     <div class="logo">ELKING11</div>
     <div class="logo-sub">SIMULATOR SYSTEM</div>
     <label class="field-label">// USER_ID &nbsp;(10 أرقام)</label>
-    <input id="user-id" class="field-input" type="text" maxlength="10" placeholder="0000000000" autocomplete="off">
+    <input id="user-id" class="field-input" type="text" maxlength="10" placeholder="0000000000" autocomplete="off" inputmode="numeric">
     <label class="field-label">// PASSWORD</label>
     <input id="password" class="field-input" type="password" placeholder="ادخل الباسورد" autocomplete="off">
     <button class="login-btn" onclick="doLogin()">ENTER SYSTEM &rarr;</button>
@@ -204,7 +205,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- LOADING -->
 <div id="loading-screen" class="screen">
   <div class="loading-title">ELKING11 SIMULATOR</div>
@@ -215,7 +216,7 @@
   </div>
   <div class="loading-log" id="load-log">Initializing Game Engine...</div>
 </div>
- 
+
 <!-- DASHBOARD -->
 <div id="dashboard-screen" class="screen">
   <div class="dash-header">
@@ -245,7 +246,7 @@
   </div>
   <div class="dash-footer">FICTIONAL SIMULATOR — FOR ENTERTAINMENT ONLY</div>
 </div>
- 
+
 <script>
 // Matrix Rain
 const canvas = document.getElementById('matrix-canvas');
@@ -276,15 +277,11 @@ const logs=["Initializing Game Engine...","Loading core modules...","Allocating 
 
 function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
-// الباسورد = كل رقمين من الـ ID يتفصلوا بـ @ # $ % بالتسلسل
-// مثال: 1234567890  →  12@34#56$78%90
 function buildPassword(uid){
   const syms = ['@','#','$','%'];
   let result = '';
   for(let i=0; i<uid.length; i+=2){
-    if(i>0){
-      result += syms[((i/2)-1) % syms.length];
-    }
+    if(i>0){ result += syms[((i/2)-1) % syms.length]; }
     result += uid.substring(i, i+2);
   }
   return result;
